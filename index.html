@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101515">
+  <title>One Set — Workout Tracker</title>
+  <style>
+    :root{color-scheme:dark;--bg:#101515;--surface:#1b2221;--surface2:#242d2b;--line:#38423f;--ink:#f0f5f2;--muted:#a6b4ae;--accent:#b4f9b6;--accentdark:#1e3325;--danger:#ffb1a8;--shadow:0 20px 80px rgba(0,0,0,.24)}
+    *{box-sizing:border-box}html{min-height:100%}body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+    button,input{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.45}button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+    .shell{width:min(100% - 32px,540px);margin:0 auto;padding:26px 0 75px}.header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 35px}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:850;letter-spacing:-.07em;font-size:23px}.brandmark{display:grid;place-items:center;flex:none;border-radius:11px;width:34px;height:34px;background:var(--accent);color:#101a12;font-size:19px;font-weight:900;letter-spacing:-.08em}
+    .quietBtn{border:1px solid var(--line);border-radius:100px;background:transparent;color:var(--muted);padding:10px 13px;font-size:13px;font-weight:650}.quietBtn:hover{color:var(--ink);border-color:var(--muted)}
+    .eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:820}.big{font-size:clamp(34px,7vw,45px);font-weight:790;letter-spacing:-.068em;line-height:1.1;margin:12px 0 8px}.sub{font-size:15px;color:var(--muted);line-height:1.55;margin:0}
+    .panel{border:1px solid var(--line);border-radius:19px;background:var(--surface);padding:21px;margin-top:25px;box-shadow:var(--shadow)}.tinyline{display:flex;align-items:center;justify-content:space-between;gap:9px;color:var(--muted);font-size:13px}.tinyline strong{color:var(--ink)}
+    .dayGrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:22px}.dayCard{min-height:104px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;color:var(--ink);padding:17px;display:flex;flex-direction:column;justify-content:space-between;gap:8px;transition:border-color .2s,transform .2s}.dayCard:hover{border-color:var(--accent);transform:translateY(-1px)}.dayCard b{font-size:18px;letter-spacing:-.025em}.dayCard span{font-size:12px;color:var(--muted)}.dayCard .today{color:var(--accent)}
+    .primary{border:0;background:var(--accent);color:#172218;border-radius:13px;display:block;width:100%;font-weight:790;font-size:16px;padding:17px 14px;min-height:57px}.primary:hover:not(:disabled){background:#cbffcb}.secondary{background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:13px;padding:13px 16px;font-size:14px;font-weight:650}.secondary:hover{border-color:var(--muted)}.smallLink{color:var(--muted);border:0;background:none;text-decoration:underline;text-underline-offset:3px;font-size:13px;padding:10px 0}.smallLink:hover{color:var(--ink)}
+    .progress{display:flex;gap:6px;margin:19px 0 25px}.progress div{height:5px;background:var(--surface2);border-radius:99px;flex:1;transition:background .15s}.progress div.on{background:var(--accent)}
+    .exerciseName{font-size:clamp(31px,6.6vw,42px);line-height:1.12;font-weight:820;letter-spacing:-.055em;margin:14px 0}.range{font-size:14px;color:var(--muted)}
+    .prev{margin-top:25px;padding:15px 17px;background:#18251d;border:1px solid #37523b;border-radius:14px}.prevTop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px}.prevTop b{font-size:13px;color:var(--accent)}.prevTop span{font-size:12px;color:#afbeaf}.prevData{font-size:15px;font-weight:730}.prevEmpty{font-size:13px;color:var(--muted)}
+    .progressCue{margin:9px 0 0;font-size:12px;line-height:1.5;color:#cce7c9}.extraActions{display:flex;gap:10px;flex-direction:column;margin-top:13px}.extraActions .secondary{width:100%}.optionalNote{font-size:12px;line-height:1.55;color:var(--muted);margin:10px 0 0}
+    .setPanel{background:var(--surface);border:1px solid var(--line);padding:22px;border-radius:19px;margin-top:23px}.setTop{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:20px}.setTop strong{font-size:17px}.dotRow{display:flex;gap:7px}.dot{height:9px;width:9px;background:#44514b;border-radius:50%}.dot.done{background:var(--accent)}.dot.now{outline:2px solid var(--accent);outline-offset:3px}
+    .fields{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:18px}.field label{color:var(--muted);display:block;font-size:12px;font-weight:660;margin-bottom:8px}.field input{width:100%;height:67px;color:var(--ink);background:var(--surface2);border-radius:12px;border:1px solid #4b5a53;padding:12px 14px;font-size:27px;font-weight:680;font-variant-numeric:tabular-nums}.field input::placeholder{color:#677870}.field small{color:var(--muted);display:block;margin-top:7px;font-size:11px;min-height:14px}.modeRow{display:flex;gap:8px;margin:-2px 0 18px;flex-wrap:wrap}.pill{background:var(--surface2);border:1px solid var(--line);border-radius:100px;color:var(--muted);padding:9px 11px;font-size:13px;font-weight:640}.pill.selected{background:var(--accentdark);color:var(--accent);border-color:#79bb80}.onlyInput{grid-template-columns:1fr}.assistNote{font-size:12px;color:var(--muted);margin:-5px 0 15px;line-height:1.5}
+    .saved{margin:20px 0 0}.saved h3{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0 0 9px;font-weight:800}.savedRow{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #2c3532;padding:10px 2px;font-size:14px}.savedRow .num{color:var(--muted);margin-right:12px}.savedRow .tick{color:var(--accent)}
+    .completeCard{text-align:center;padding:38px 20px 30px;border:1px solid #456447;background:#1b2b20;border-radius:18px;margin-top:26px}.completeIcon{width:63px;height:63px;background:var(--accent);color:#172218;border-radius:50%;display:grid;place-items:center;margin:0 auto 19px;font-size:29px}.completeCard h2{font-size:29px;letter-spacing:-.05em;margin:0 0 9px}.completeCard p{color:var(--muted);font-size:14px;line-height:1.55;margin:0 0 23px}
+    .buttonRow{display:flex;gap:10px;margin-top:16px}.buttonRow>*{flex:1}.resumeBox{margin:20px 0 0;background:#18251d;border:1px solid #37523b;border-radius:15px;padding:16px}.resumeBox p{color:var(--muted);font-size:13px;margin:5px 0 13px}.resumeBox .primary{min-height:48px;padding:12px}.backNav{display:flex;justify-content:flex-start;margin:-8px 0 20px}.backNav button{text-decoration:none;padding:8px 0}.sessionDelete{border:1px solid #65413d;border-radius:10px;background:transparent;color:var(--danger);padding:10px 12px;font-size:12px;font-weight:700;min-height:40px;margin-top:5px}.sessionDelete:hover{background:#402a28}.notice{border:1px solid #705938;background:#30291e;border-radius:12px;padding:13px;color:#ebd0a4;font-size:13px;line-height:1.5;margin:16px 0}
+    .toolsSection{margin-top:28px}.toolsTitle{font-size:15px;font-weight:770;letter-spacing:-.02em;margin:0 0 12px}.historyCard{background:var(--surface);border:1px solid var(--line);border-radius:13px;margin-bottom:10px;overflow:hidden}.historyCard summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:16px}.historyCard summary::-webkit-details-marker{display:none}.historyCard summary b{font-size:14px}.historyCard summary small{display:block;color:var(--muted);margin-top:3px;font-size:12px}.historyInner{border-top:1px solid var(--line);padding:12px 16px 16px}.historyEx{margin-bottom:15px}.historyEx:last-child{margin-bottom:0}.historyEx strong{font-size:13px}.historyEx div{color:var(--muted);font-size:12px;margin-top:6px;line-height:1.65}.historyCard .arrow{color:var(--muted)}.historyCard[open] .arrow{transform:rotate(90deg)}
+    .dataControls{display:flex;gap:8px;flex-wrap:wrap}.dataControls button{flex:1 1 145px}.footnote{font-size:12px;color:var(--muted);line-height:1.6;margin:13px 0 0}.miniStatus{font-size:12px;color:var(--accent);margin-top:11px;min-height:19px}.footer{text-align:center;margin:33px 0 0;font-size:12px;color:#73877d}.footer strong{color:#91ad9a}.divider{height:1px;background:var(--line);margin:24px 0}.fade{animation:fade .25s ease-out}@keyframes fade{from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+    @media(max-width:370px){.fields{gap:8px}.field input{font-size:23px}.shell{width:calc(100% - 24px)}.panel,.setPanel{padding:17px}.dayCard{padding:14px}}
+    @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="header"><div class="brand"><span class="brandmark">1</span><span>one set.</span></div><button id="menuButton" class="quietBtn" type="button">History & backup</button></header>
+    <div id="app" aria-live="polite"></div>
+    <footer class="footer">One exercise. One set. <strong>Get stronger.</strong></footer>
+  </main>
+<script>
+(function(){
+  'use strict';
+  const STORAGE_KEY='oneset_tracker_original_plan_v1';
+  const PLAN={
+    mon:{day:'Monday',name:'Upper A',exercises:[
+      {id:'pullups',name:'Pull-ups / assisted pull-ups',sets:4,reps:'5–10',kind:'body',hint:'Begin each rep from a proper hang.'},
+      {id:'incline',name:'Incline DB press',sets:4,reps:'8–15',kind:'db'},
+      {id:'row',name:'One-arm DB row',sets:3,reps:'8–15 each',kind:'db',hint:'Log reps per arm. If different, use the lower rep count.'},
+      {id:'lateral',name:'DB lateral raise',sets:3,reps:'12–20',kind:'db'}
+    ]},
+    tue:{day:'Tuesday',name:'Lower + Abs',exercises:[
+      {id:'split',name:'Bulgarian split squat',sets:4,reps:'8–15 each',kind:'db',hint:'Log reps per leg. If different, use the lower rep count.'},
+      {id:'rdl',name:'DB Romanian deadlift',sets:4,reps:'8–15',kind:'db',hint:'Start light and prioritise a controlled hip hinge.'},
+      {id:'calf',name:'Standing DB calf raise',sets:3,reps:'12–20',kind:'db'},
+      {id:'knees',name:'Hanging knee raise',sets:3,reps:'8–15',kind:'body'}
+    ]},
+    thu:{day:'Thursday',name:'Upper B',exercises:[
+      {id:'chinups',name:'Chin-ups',sets:4,reps:'5–10',kind:'body'},
+      {id:'flat',name:'Flat DB bench press',sets:4,reps:'8–15',kind:'db'},
+      {id:'shoulder',name:'DB shoulder press',sets:3,reps:'8–15',kind:'db'},
+      {id:'hammer',name:'Hammer curl',sets:3,reps:'8–15',kind:'db'}
+    ]},
+    sat:{day:'Saturday',name:'Full Body',exercises:[
+      {id:'split',name:'Bulgarian split squat',sets:3,reps:'10–15 each',kind:'db',hint:'Log reps per leg. If different, use the lower rep count.'},
+      {id:'pullups',name:'Pull-ups',sets:3,reps:'5–10',kind:'body'},
+      {id:'incline',name:'Incline DB press',sets:3,reps:'8–15',kind:'db'},
+      {id:'lateral',name:'DB lateral raise',sets:3,reps:'12–20',kind:'db'}
+    ]}
+  };
+  const DAYS=['mon','tue','thu','sat'];
+  const MAX_EXTRA_SETS=4; // Optional sets, beyond the PDF's prescribed sets. Never suggested as a requirement.
+  const app=document.getElementById('app');
+  const menuButton=document.getElementById('menuButton');
+  let view='home';
+  let toolsBackView='home';
+  let storageOk=true;
+  let draft=null;
+  let state={version:1,sessions:[],activeId:null};
+  function storageRead(){try{const json=localStorage.getItem(STORAGE_KEY);if(json){const obj=JSON.parse(json);if(obj&&obj.version===1&&Array.isArray(obj.sessions)){state=obj;return;}}localStorage.setItem('__oneset_test','yes');localStorage.removeItem('__oneset_test');}catch(e){storageOk=false;}}
+  function persist(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));storageOk=true;}catch(e){storageOk=false;}}
+  const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const dateText=date=>{try{return new Date(date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}catch(e){return ''}};
+  function current(){return state.sessions.find(s=>s.id===state.activeId&&s.status==='active')||null;}
+  function getExercise(s){return PLAN[s.dayId]?.exercises[s.index]||null;}
+  function logFor(s,id){return Array.isArray(s.logs?.[id])?s.logs[id]:[];}
+  function extraFor(s,ex){const n=s.extraSets?.[ex.id];return Number.isInteger(n)?Math.max(0,Math.min(MAX_EXTRA_SETS,n)):0;}
+  function targetFor(s,ex){return ex.sets+extraFor(s,ex);}
+  function progressionCue(previous,ex){
+    if(!previous)return '';
+    const match=ex.reps.match(/(\d+)\s*[–-]\s*(\d+)/);
+    const upper=match?Number(match[2]):null;
+    if(upper!==null&&previous.reps>=upper){
+      return previous.mode==='assisted'?'Top of the rep range. Try slightly less assistance when ready.':
+        'Top of the rep range. If your technique is solid, consider a little more resistance next time.';
+    }
+    return `Optional goal: ${previous.reps+1} clean reps at the same resistance. Matching last time is fine too.`;
+  }
+  function findPrevious(exId,sId){return state.sessions.filter(s=>s.id!==sId&&Array.isArray(s.logs?.[exId])&&s.logs[exId].length>0).sort((a,b)=>new Date(b.startedAt)-new Date(a.startedAt))[0]||null;}
+  function loadWeight(ex,logs,prior,index){const saved=logs.length?logs[logs.length-1]:null;const before=prior?.logs?.[ex.id]?.[index]||prior?.logs?.[ex.id]?.[0]||null;return saved||before||null;}
+  function formatSet(set,ex){const w=Number(set.kg)||0;if(ex.kind==='body'){const mode=set.mode||'bw';return `${set.reps} reps · ${mode==='added'?`BW +${w} kg`:mode==='assisted'?(w?`assisted ${w} kg`:'assisted'):'bodyweight'}`;}return `${set.reps} reps · ${w} kg / DB`;}
+  function isValidSet(set){return set&&Number.isInteger(set.reps)&&set.reps>=1&&set.reps<=300&&typeof set.kg==='number'&&Number.isFinite(set.kg)&&set.kg>=0&&set.kg<=300&&['bw','added','assisted','db'].includes(set.mode);}
+  function printStorageWarning(){return !storageOk?'<div class="notice" role="alert">Browser saving is unavailable here. Your entries may disappear when you close this page. Try opening this file in Chrome or Edge and download a backup after training.</div>':'';}
+  function render(){
+    if(view==='workout'&&!current())view='home';
+    menuButton.textContent=view==='tools'?(toolsBackView==='workout'&&current()?'Back to workout':'Back to workouts'):'History & backup';
+    if(view==='tools')renderTools();
+    else if(view==='complete')renderComplete();
+    else if(view==='workout')renderWorkout();
+    else renderHome();
+  }
+  function renderHome(){
+    const daynum=new Date().getDay();
+    const suggested={1:'mon',2:'tue',4:'thu',6:'sat'}[daynum];
+    const active=current();
+    const logged=active?Object.values(active.logs).reduce((sum,sets)=>sum+(Array.isArray(sets)?sets.length:0),0):0;
+    app.innerHTML=`<section class="fade"><div class="eyebrow">YOUR ORIGINAL 12-WEEK PLAN</div><h1 class="big">Show up.<br>Do the next set.</h1><p class="sub">Choose a workout. Only one exercise appears at a time.</p>${printStorageWarning()}
+      ${active?`<div class="resumeBox"><div class="eyebrow">IN PROGRESS</div><strong>${esc(PLAN[active.dayId].name)}</strong><p>${logged} ${logged===1?'set':'sets'} saved · Pick up where you left off</p><button type="button" id="resumeWorkout" class="primary">Resume workout →</button></div>`:''}
+      <div class="dayGrid">${DAYS.map(id=>`<button class="dayCard" data-start="${id}" type="button"><b>${esc(PLAN[id].name)}</b><span>${PLAN[id].day}${id===suggested?' <span class="today">· Today</span>':''}</span></button>`).join('')}</div><p class="footnote">Choosing the wrong workout is fine. You can come back here anytime. Completed sets save automatically on this device.</p></section>`;
+    app.querySelectorAll('[data-start]').forEach(b=>b.addEventListener('click',()=>startSession(b.dataset.start)));
+    document.getElementById('resumeWorkout')?.addEventListener('click',()=>{view='workout';render();});
+  }
+  function startSession(dayId){
+    if(!PLAN[dayId])return;
+    const old=current();
+    if(old){
+      if(old.dayId===dayId){view='workout';render();return;}
+      const hasSets=Object.values(old.logs).some(sets=>Array.isArray(sets)&&sets.length>0);
+      if(!hasSets){
+        // An accidentally chosen, empty session is replaced rather than cluttering history.
+        old.dayId=dayId;old.index=0;old.logs={};old.startedAt=new Date().toISOString();
+        draft=null;persist();view='workout';render();return;
+      }
+      if(!confirm(`Switch to ${PLAN[dayId].name}? Your logged ${PLAN[old.dayId].name} sets will be kept in history as a partial workout.`))return;
+      old.status='partial';old.finishedAt=new Date().toISOString();
+    }
+    const session={id:'session-'+Date.now()+'-'+Math.random().toString(36).slice(2,9),dayId,startedAt:new Date().toISOString(),finishedAt:null,status:'active',index:0,logs:{},extraSets:{}};
+    state.sessions.push(session);state.activeId=session.id;draft=null;persist();view='workout';render();
+  }
+  function renderWorkout(){
+    const s=current();if(!s){view='home';render();return;}
+    const plan=PLAN[s.dayId],ex=getExercise(s);if(!ex){finishWorkout();return;}
+    const logs=logFor(s,ex.id),count=logs.length,total=targetFor(s,ex),extra=extraFor(s,ex);
+    const prior=findPrevious(ex.id,s.id),prevSets=prior?logFor(prior,ex.id):[];
+    const completed=count>=total,suggestion=loadWeight(ex,logs,prior,count);
+    const mode=draft?.mode||suggestion?.mode||(ex.kind==='body'?'bw':'db');
+    const weight=draft?.kg??suggestion?.kg??'';const reps=draft?.reps??'';
+    // Strictly compare set N with set N. Never mislabel the first set as an earlier set N.
+    const previousSet=prevSets[count]||null;
+    const priorWorkout=prior&&PLAN[prior.dayId]?.name;
+    const previousTitle=prior?`Last time · Set ${count+1}`:'Your starting point';
+    const previousInfo=prior
+      ?(previousSet?esc(formatSet(previousSet,ex)):`No set ${count+1} logged last time`)
+      :'Your first time logging this exercise.';
+    const previousContent=!completed?`<div class="prev"><div class="prevTop"><b>${esc(previousTitle)}</b><span>${prior?dateText(prior.startedAt):'No history yet'}</span></div><div class="${previousSet?'prevData':'prevEmpty'}">${previousInfo}</div>${previousSet?`<p class="progressCue">${esc(progressionCue(previousSet,ex))}</p>`:''}${prior?`<details style="margin-top:10px"><summary style="font-size:12px;color:var(--muted);cursor:pointer">All previous sets${priorWorkout?` · ${esc(priorWorkout)}`:''}</summary><div style="font-size:12px;color:var(--muted);margin-top:8px;line-height:1.9">${prevSets.map((set,i)=>`Set ${i+1}: ${esc(formatSet(set,ex))}`).join('<br>')}</div></details>`:''}</div>`:'';
+    app.innerHTML=`<section class="fade"><div class="backNav"><button type="button" class="smallLink" id="backToWorkouts">← All workouts</button></div><div class="tinyline"><span>${esc(plan.name)}</span><span>Exercise <strong>${s.index+1}</strong> of ${plan.exercises.length}</span></div><div class="progress" aria-hidden="true">${plan.exercises.map((_,i)=>`<div class="${i<=s.index?'on':''}"></div>`).join('')}</div><div class="eyebrow">ONLY FOCUS ON THIS</div><h1 class="exerciseName">${esc(ex.name)}</h1><p class="range">${ex.sets} planned sets · ${esc(ex.reps)} reps${ex.hint?`<br>${esc(ex.hint)}`:''}</p>
+      ${previousContent}
+      ${!completed?`<div class="setPanel"><div class="setTop"><strong>Set ${count+1} <span style="color:var(--muted);font-weight:500">/ ${total}</span>${count>=ex.sets?'<span style="font-size:11px;color:var(--accent);margin-left:8px">Optional</span>':''}</strong><div class="dotRow" aria-hidden="true">${Array.from({length:total},(_,i)=>`<span class="dot ${i<count?'done':i===count?'now':''}"></span>`).join('')}</div></div><form id="setForm" novalidate>${ex.kind==='body'?`<div class="modeRow" aria-label="Weight type"><button type="button" data-mode="bw" class="pill ${mode==='bw'?'selected':''}">Bodyweight</button><button type="button" data-mode="added" class="pill ${mode==='added'?'selected':''}">+ Weight</button><button type="button" data-mode="assisted" class="pill ${mode==='assisted'?'selected':''}">Assisted</button></div>`:''}<div class="fields ${ex.kind==='body'&&mode==='bw'?'onlyInput':''}"><div class="field"><label for="reps">Reps done</label><input inputmode="numeric" type="number" min="1" max="300" step="1" autocomplete="off" id="reps" placeholder="0" value="${esc(reps)}" required><small>${ex.kind==='body'?'Clean reps only':'Reps completed this set'}</small></div>${ex.kind==='db'||mode!=='bw'?`<div class="field"><label for="kg">${ex.kind==='db'?'Kg per dumbbell':mode==='added'?'Kg added':'Kg assistance (optional)'}</label><input inputmode="decimal" type="number" min="0" max="300" step="any" id="kg" placeholder="0" value="${esc(weight)}" ${mode==='assisted'?'':'required'}><small>${ex.kind==='db'?'If using two, enter one DB weight':mode==='added'?'Extra weight only':'0 = band / other assistance'}</small></div>`:''}</div>${ex.kind==='body'&&mode==='assisted'?`<p class="assistNote">If you're using a band or your feet for assistance, leave kg at 0.</p>`:''}<button class="primary" type="submit">Save set ${count+1} ✓</button><p id="formError" role="alert" style="min-height:0;color:var(--danger);font-size:12px;margin:8px 0 0"></p></form>${count>=ex.sets?'<p class="optionalNote">Your planned sets are done. This extra set is completely optional.</p><div style="text-align:center"><button class="smallLink" id="cancelExtra" type="button">Never mind · finish exercise</button></div>':''}</div>`:`<div class="completeCard"><div class="completeIcon">✓</div><h2>Exercise done.</h2><p>All planned sets logged. You can move on — more sets aren't needed to make progress.</p><button class="primary" type="button" id="nextBtn">${s.index===plan.exercises.length-1?'Finish workout':'Next exercise →'}</button>${extra<MAX_EXTRA_SETS?'<div class="extraActions"><button class="secondary" type="button" id="addSet">+ Add an optional set</button></div>':''}</div>`}
+      ${count?`<div class="saved"><h3>Saved sets</h3>${logs.map((set,i)=>`<div class="savedRow"><span><span class="num">${i+1}.</span>${esc(formatSet(set,ex))}</span><span class="tick" aria-label="Saved">✓</span></div>`).join('')}<div style="text-align:right"><button class="smallLink" id="undo" type="button">Undo last set</button></div></div>`:''}
+      ${!completed&&count<ex.sets?`<div style="text-align:center;margin-top:20px"><button class="smallLink" id="skip" type="button">Skip this exercise</button></div>`:''}
+    </section>`;
+    if(!completed){document.getElementById('setForm').addEventListener('submit',saveSet);app.querySelectorAll('[data-mode]').forEach(button=>button.addEventListener('click',()=>{const repVal=document.getElementById('reps').value;const kgEl=document.getElementById('kg');const nextMode=button.dataset.mode;draft={mode:nextMode,reps:repVal,kg:kgEl?kgEl.value:0};render();}));}
+    else document.getElementById('nextBtn').addEventListener('click',nextExercise);
+    document.getElementById('addSet')?.addEventListener('click',addExtraSet);
+    document.getElementById('cancelExtra')?.addEventListener('click',cancelExtraSet);
+    document.getElementById('undo')?.addEventListener('click',undoLast);
+    document.getElementById('backToWorkouts').addEventListener('click',()=>{draft=null;view='home';render();window.scrollTo({top:0,behavior:'instant'});});
+    document.getElementById('skip')?.addEventListener('click',()=>{if(confirm('Skip this exercise and move on?'))nextExercise();});
+  }
+  function addExtraSet(){
+    const s=current(),ex=s&&getExercise(s);if(!ex||logFor(s,ex.id).length<targetFor(s,ex)||extraFor(s,ex)>=MAX_EXTRA_SETS)return;
+    if(!s.extraSets)s.extraSets={};s.extraSets[ex.id]=extraFor(s,ex)+1;
+    draft=null;persist();render();
+  }
+  function cancelExtraSet(){
+    const s=current(),ex=s&&getExercise(s);if(!ex||logFor(s,ex.id).length<ex.sets||logFor(s,ex.id).length>=targetFor(s,ex))return;
+    s.extraSets[ex.id]=logFor(s,ex.id).length-ex.sets;
+    draft=null;persist();render();
+  }
+  function saveSet(event){event.preventDefault();const s=current(),ex=getExercise(s);if(!s||!ex)return;const input=document.getElementById('reps');const kgInput=document.getElementById('kg');const reps=Number(input.value);const weightRaw=kgInput?.value??'0';const kg=weightRaw===''&&ex.kind==='body'?0:Number(weightRaw);const selected=app.querySelector('[data-mode].selected');const mode=ex.kind==='db'?'db':(selected?.dataset.mode||'bw');
+    const error=document.getElementById('formError');if(!Number.isInteger(reps)||reps<1||reps>300){error.textContent='Enter how many full reps you completed.';input.focus();return;}if(kgInput&&((weightRaw===''&&mode!=='assisted')||!Number.isFinite(kg)||kg<0||kg>300)){error.textContent='Enter a valid weight in kg (0 is allowed).';kgInput.focus();return;}
+    const newset={reps,kg,mode,at:new Date().toISOString()};if(!isValidSet(newset))return;
+    if(!s.logs[ex.id])s.logs[ex.id]=[];if(s.logs[ex.id].length>=targetFor(s,ex))return;s.logs[ex.id].push(newset);draft=null;persist();render();const next=document.getElementById('reps');if(next)next.focus();}
+  function undoLast(){const s=current(),ex=getExercise(s);if(!s||!ex)return;const logs=logFor(s,ex.id);if(!logs.length)return;const removed=logs.pop();draft={reps:removed.reps,kg:removed.kg,mode:removed.mode};persist();render();document.getElementById('reps')?.focus();}
+  function nextExercise(){const s=current();if(!s)return;if(s.index<PLAN[s.dayId].exercises.length-1){s.index++;draft=null;persist();render();window.scrollTo({top:0,behavior:'instant'});}else finishWorkout();}
+  function finishWorkout(){const s=current();if(s){s.status='finished';s.finishedAt=new Date().toISOString();state.activeId=null;persist();}draft=null;view='complete';render();}
+  function renderComplete(){app.innerHTML=`<section class="fade"><div class="eyebrow">WORKOUT SAVED</div><div class="completeCard"><div class="completeIcon">✓</div><h2>All done.</h2><p>Today's work is recorded. Your numbers will be here the next time you train.</p><button id="goHome" type="button" class="primary">Back to workouts</button></div><p class="footnote" style="text-align:center">No more exercises to think about today.</p></section>`;document.getElementById('goHome').addEventListener('click',()=>{view='home';render();});}
+  function renderTools(){
+    const active=current();
+    const chronological=[...state.sessions].sort((a,b)=>new Date(b.startedAt)-new Date(a.startedAt));
+    app.innerHTML=`<section class="fade"><div class="eyebrow">YOUR DATA</div><h1 class="big">History & backup.</h1><p class="sub">Your workout screen stays simple. Everything else lives here.</p>${printStorageWarning()}
+      <section class="toolsSection"><h2 class="toolsTitle">Sessions (${chronological.length})</h2>${chronological.length?chronological.map(s=>{
+        const plan=PLAN[s.dayId];if(!plan)return '';
+        const entries=plan.exercises.map(ex=>({ex,sets:logFor(s,ex.id)})).filter(e=>e.sets.length);
+        const status=s.status==='finished'?'Finished':s.status==='active'?'In progress':'Partial';
+        return `<details class="historyCard"><summary><span><b>${esc(plan.name)}</b><small>${dateText(s.startedAt)} · ${status} · ${entries.reduce((sum,e)=>sum+e.sets.length,0)} sets logged</small></span><span class="arrow">›</span></summary><div class="historyInner">${entries.length?entries.map(e=>`<div class="historyEx"><strong>${esc(e.ex.name)}</strong><div>${e.sets.map((set,i)=>`Set ${i+1}: ${esc(formatSet(set,e.ex))}`).join('<br>')}</div></div>`).join(''):'<div class="footnote">No sets logged.</div>'}<button class="sessionDelete" type="button" data-delete-session="${esc(s.id)}">${s.status==='active'?'Discard this workout':'Delete this session'}</button></div></details>`;
+      }).join(''):'<p class="footnote">Nothing yet. Log your first set and it will appear here.</p>'}</section>
+      <div class="divider"></div><section class="toolsSection"><h2 class="toolsTitle">Keep your numbers safe</h2><div class="dataControls"><button class="secondary" type="button" id="exportJson">Download backup</button><button class="secondary" type="button" id="exportCsv">Export CSV</button><button class="secondary" type="button" id="importJson">Restore backup</button></div><input id="importFile" type="file" accept=".json,application/json" hidden><p class="footnote"><b>Automatic saving:</b> This browser remembers your sets even after you close the tab, as long as its local site data stays intact. It doesn't sync across browsers or devices. Don't use private/incognito mode. Download a backup occasionally.</p><div id="backupStatus" class="miniStatus" aria-live="polite"></div><button type="button" class="smallLink" id="erase">Erase all tracker data</button></section>
+      ${active?'<button type="button" class="primary" style="margin-top:25px" id="returnWorkout">Return to current exercise →</button>':''}</section>`;
+    document.getElementById('exportJson').addEventListener('click',exportJson);
+    document.getElementById('exportCsv').addEventListener('click',exportCsv);
+    document.getElementById('importJson').addEventListener('click',()=>document.getElementById('importFile').click());
+    document.getElementById('importFile').addEventListener('change',importJson);
+    document.getElementById('erase').addEventListener('click',eraseAll);
+    document.querySelectorAll('[data-delete-session]').forEach(button=>button.addEventListener('click',()=>deleteSession(button.dataset.deleteSession)));
+    document.getElementById('returnWorkout')?.addEventListener('click',()=>{view='workout';render();});
+  }
+  function deleteSession(sessionId){
+    const session=state.sessions.find(s=>s.id===sessionId);
+    if(!session)return;
+    const name=PLAN[session.dayId]?.name||'workout';
+    const question=session.status==='active'
+      ?`Discard your in-progress ${name} workout from ${dateText(session.startedAt)}? All sets in this session will be deleted.`
+      :`Delete the ${name} session from ${dateText(session.startedAt)} and all its sets? This cannot be undone without a backup.`;
+    if(!confirm(question))return;
+    state.sessions=state.sessions.filter(s=>s.id!==sessionId);
+    if(state.activeId===sessionId){state.activeId=null;draft=null;toolsBackView='home';}
+    persist();render();
+  }
+  function downloadBlob(name,content,type){const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download=name;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);}
+  function exportJson(){downloadBlob('one-set-workouts-backup-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(state,null,2),'application/json');document.getElementById('backupStatus').textContent='Backup downloaded. Keep it somewhere safe.';}
+  function exportCsv(){const rows=[['Date','Workout','Exercise','Set','Reps','Kg','Weight type','Status']];for(const s of [...state.sessions].sort((a,b)=>new Date(a.startedAt)-new Date(b.startedAt))){const day=PLAN[s.dayId];if(!day)continue;for(const ex of day.exercises){logFor(s,ex.id).forEach((set,i)=>rows.push([new Date(s.startedAt).toISOString().slice(0,10),day.name,ex.name,i+1,set.reps,set.kg,set.mode==='db'?'per dumbbell':set.mode==='bw'?'bodyweight':set.mode==='added'?'added': 'assisted',s.status]));}}
+    const csv=rows.map(row=>row.map(cell=>'"'+String(cell).replace(/"/g,'""')+'"').join(',')).join('\r\n');downloadBlob('one-set-workouts-'+new Date().toISOString().slice(0,10)+'.csv',csv,'text/csv;charset=utf-8');document.getElementById('backupStatus').textContent='CSV downloaded.';}
+  function validBackupSession(s){
+    if(!s||typeof s.id!=='string'||typeof s.startedAt!=='string'||!PLAN[s.dayId]||!Number.isInteger(s.index)||s.index<0||s.index>=PLAN[s.dayId].exercises.length||!['active','finished','partial'].includes(s.status)||!s.logs||typeof s.logs!=='object'||Array.isArray(s.logs))return false;
+    const exercises=PLAN[s.dayId].exercises;
+    if(s.extraSets!==undefined){
+      if(!s.extraSets||typeof s.extraSets!=='object'||Array.isArray(s.extraSets))return false;
+      if(!Object.keys(s.extraSets).every(k=>exercises.some(e=>e.id===k)&&Number.isInteger(s.extraSets[k])&&s.extraSets[k]>=0&&s.extraSets[k]<=MAX_EXTRA_SETS))return false;
+    }
+    return Object.keys(s.logs).every(k=>{
+      const ex=exercises.find(e=>e.id===k);
+      if(!ex||!Array.isArray(s.logs[k]))return false;
+      // Old v1 backups allowed 4 sets for each exercise; newer backups allow explicitly added sets.
+      const max=Math.max(4,ex.sets+(s.extraSets?.[k]||0));
+      return s.logs[k].length<=max&&s.logs[k].every(isValidSet);
+    });
+  }
+  async function importJson(event){const file=event.target.files?.[0];event.target.value='';if(!file)return;let obj;try{obj=JSON.parse(await file.text());}catch(e){alert('That file is not valid JSON.');return;}
+    if(!obj||obj.version!==1||!Array.isArray(obj.sessions)||obj.sessions.length>20000||!obj.sessions.every(validBackupSession)){alert('This does not look like a valid One Set backup. Nothing was changed.');return;}
+    if(!confirm('Restore this backup? It will replace the workout history currently saved in this browser.'))return;
+    state={version:1,sessions:obj.sessions,activeId:typeof obj.activeId==='string'?obj.activeId:null};if(!current())state.activeId=null;draft=null;persist();view='tools';render();document.getElementById('backupStatus').textContent='Backup restored successfully.';}
+  function eraseAll(){if(!confirm('Permanently erase all logged workouts on this browser? Download a backup first if you may want them later.'))return;if(!confirm('Are you sure? This cannot be undone without a backup.'))return;state={version:1,sessions:[],activeId:null};draft=null;persist();view='home';render();}
+  menuButton.addEventListener('click',()=>{
+    if(view==='tools')view=toolsBackView==='workout'&&current()?'workout':'home';
+    else{toolsBackView=view==='workout'?'workout':'home';view='tools';}
+    render();window.scrollTo({top:0,behavior:'instant'});
+  });
+  window.addEventListener('storage',e=>{if(e.key===STORAGE_KEY){storageRead();draft=null;render();}});
+  storageRead();render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#101515"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="One Set"><title>One Set — Cloud Workout Tracker</title><!-- One Set's public connection details. Edit ONLY the two values below in GitHub.
+     Use your Supabase PROJECT URL and PUBLISHABLE key (sb_publishable_...).
+     NEVER put a password, secret key (sb_secret_), or service_role key here. -->
+<script>
+window.ONE_SET_PUBLIC_CONFIG = {
+  url: 'PASTE_SUPABASE_PROJECT_URL_HERE',
+  key: 'PASTE_SUPABASE_PUBLISHABLE_KEY_HERE'
+};
+</script>
+<style>
+    :root{color-scheme:dark;--bg:#101515;--surface:#1b2221;--surface2:#242d2b;--line:#38423f;--ink:#f0f5f2;--muted:#a6b4ae;--accent:#b4f9b6;--accentdark:#1e3325;--danger:#ffb1a8;--shadow:0 20px 80px rgba(0,0,0,.24)}
+    *{box-sizing:border-box}html{min-height:100%}body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+    button,input{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.45}button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+    .shell{width:min(100% - 32px,540px);margin:0 auto;padding:26px 0 75px}.header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 35px}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:850;letter-spacing:-.07em;font-size:23px}.brandmark{display:grid;place-items:center;flex:none;border-radius:11px;width:34px;height:34px;background:var(--accent);color:#101a12;font-size:19px;font-weight:900;letter-spacing:-.08em}
+    .quietBtn{border:1px solid var(--line);border-radius:100px;background:transparent;color:var(--muted);padding:10px 13px;font-size:13px;font-weight:650}.quietBtn:hover{color:var(--ink);border-color:var(--muted)}
+    .eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:820}.big{font-size:clamp(34px,7vw,45px);font-weight:790;letter-spacing:-.068em;line-height:1.1;margin:12px 0 8px}.sub{font-size:15px;color:var(--muted);line-height:1.55;margin:0}
+    .panel{border:1px solid var(--line);border-radius:19px;background:var(--surface);padding:21px;margin-top:25px;box-shadow:var(--shadow)}.tinyline{display:flex;align-items:center;justify-content:space-between;gap:9px;color:var(--muted);font-size:13px}.tinyline strong{color:var(--ink)}
+    .dayGrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:22px}.dayCard{min-height:104px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;color:var(--ink);padding:17px;display:flex;flex-direction:column;justify-content:space-between;gap:8px;transition:border-color .2s,transform .2s}.dayCard:hover{border-color:var(--accent);transform:translateY(-1px)}.dayCard b{font-size:18px;letter-spacing:-.025em}.dayCard span{font-size:12px;color:var(--muted)}.dayCard .today{color:var(--accent)}
+    .primary{border:0;background:var(--accent);color:#172218;border-radius:13px;display:block;width:100%;font-weight:790;font-size:16px;padding:17px 14px;min-height:57px}.primary:hover:not(:disabled){background:#cbffcb}.secondary{background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:13px;padding:13px 16px;font-size:14px;font-weight:650}.secondary:hover{border-color:var(--muted)}.smallLink{color:var(--muted);border:0;background:none;text-decoration:underline;text-underline-offset:3px;font-size:13px;padding:10px 0}.smallLink:hover{color:var(--ink)}
+    .progress{display:flex;gap:6px;margin:19px 0 25px}.progress div{height:5px;background:var(--surface2);border-radius:99px;flex:1;transition:background .15s}.progress div.on{background:var(--accent)}
+    .exerciseName{font-size:clamp(31px,6.6vw,42px);line-height:1.12;font-weight:820;letter-spacing:-.055em;margin:14px 0}.range{font-size:14px;color:var(--muted)}
+    .prev{margin-top:25px;padding:15px 17px;background:#18251d;border:1px solid #37523b;border-radius:14px}.prevTop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px}.prevTop b{font-size:13px;color:var(--accent)}.prevTop span{font-size:12px;color:#afbeaf}.prevData{font-size:15px;font-weight:730}.prevEmpty{font-size:13px;color:var(--muted)}
+    .progressCue{margin:9px 0 0;font-size:12px;line-height:1.5;color:#cce7c9}.extraActions{display:flex;gap:10px;flex-direction:column;margin-top:13px}.extraActions .secondary{width:100%}.optionalNote{font-size:12px;line-height:1.55;color:var(--muted);margin:10px 0 0}
+    .setPanel{background:var(--surface);border:1px solid var(--line);padding:22px;border-radius:19px;margin-top:23px}.setTop{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:20px}.setTop strong{font-size:17px}.dotRow{display:flex;gap:7px}.dot{height:9px;width:9px;background:#44514b;border-radius:50%}.dot.done{background:var(--accent)}.dot.now{outline:2px solid var(--accent);outline-offset:3px}
+    .fields{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:18px}.field label{color:var(--muted);display:block;font-size:12px;font-weight:660;margin-bottom:8px}.field input{width:100%;height:67px;color:var(--ink);background:var(--surface2);border-radius:12px;border:1px solid #4b5a53;padding:12px 14px;font-size:27px;font-weight:680;font-variant-numeric:tabular-nums}.field input::placeholder{color:#677870}.field small{color:var(--muted);display:block;margin-top:7px;font-size:11px;min-height:14px}.modeRow{display:flex;gap:8px;margin:-2px 0 18px;flex-wrap:wrap}.pill{background:var(--surface2);border:1px solid var(--line);border-radius:100px;color:var(--muted);padding:9px 11px;font-size:13px;font-weight:640}.pill.selected{background:var(--accentdark);color:var(--accent);border-color:#79bb80}.onlyInput{grid-template-columns:1fr}.assistNote{font-size:12px;color:var(--muted);margin:-5px 0 15px;line-height:1.5}
+    .saved{margin:20px 0 0}.saved h3{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0 0 9px;font-weight:800}.savedRow{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #2c3532;padding:10px 2px;font-size:14px}.savedRow .num{color:var(--muted);margin-right:12px}.savedRow .tick{color:var(--accent)}
+    .completeCard{text-align:center;padding:38px 20px 30px;border:1px solid #456447;background:#1b2b20;border-radius:18px;margin-top:26px}.completeIcon{width:63px;height:63px;background:var(--accent);color:#172218;border-radius:50%;display:grid;place-items:center;margin:0 auto 19px;font-size:29px}.completeCard h2{font-size:29px;letter-spacing:-.05em;margin:0 0 9px}.completeCard p{color:var(--muted);font-size:14px;line-height:1.55;margin:0 0 23px}
+    .buttonRow{display:flex;gap:10px;margin-top:16px}.buttonRow>*{flex:1}.resumeBox{margin:20px 0 0;background:#18251d;border:1px solid #37523b;border-radius:15px;padding:16px}.resumeBox p{color:var(--muted);font-size:13px;margin:5px 0 13px}.resumeBox .primary{min-height:48px;padding:12px}.backNav{display:flex;justify-content:flex-start;margin:-8px 0 20px}.backNav button{text-decoration:none;padding:8px 0}.sessionDelete{border:1px solid #65413d;border-radius:10px;background:transparent;color:var(--danger);padding:10px 12px;font-size:12px;font-weight:700;min-height:40px;margin-top:5px}.sessionDelete:hover{background:#402a28}.notice{border:1px solid #705938;background:#30291e;border-radius:12px;padding:13px;color:#ebd0a4;font-size:13px;line-height:1.5;margin:16px 0}
+    .toolsSection{margin-top:28px}.toolsTitle{font-size:15px;font-weight:770;letter-spacing:-.02em;margin:0 0 12px}.historyCard{background:var(--surface);border:1px solid var(--line);border-radius:13px;margin-bottom:10px;overflow:hidden}.historyCard summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:16px}.historyCard summary::-webkit-details-marker{display:none}.historyCard summary b{font-size:14px}.historyCard summary small{display:block;color:var(--muted);margin-top:3px;font-size:12px}.historyInner{border-top:1px solid var(--line);padding:12px 16px 16px}.historyEx{margin-bottom:15px}.historyEx:last-child{margin-bottom:0}.historyEx strong{font-size:13px}.historyEx div{color:var(--muted);font-size:12px;margin-top:6px;line-height:1.65}.historyCard .arrow{color:var(--muted)}.historyCard[open] .arrow{transform:rotate(90deg)}
+    .dataControls{display:flex;gap:8px;flex-wrap:wrap}.dataControls button{flex:1 1 145px}.footnote{font-size:12px;color:var(--muted);line-height:1.6;margin:13px 0 0}.miniStatus{font-size:12px;color:var(--accent);margin-top:11px;min-height:19px}.footer{text-align:center;margin:33px 0 0;font-size:12px;color:#73877d}.footer strong{color:#91ad9a}.divider{height:1px;background:var(--line);margin:24px 0}.fade{animation:fade .25s ease-out}@keyframes fade{from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+    .editToolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:20px 0 6px}
+    .planItem{background:var(--surface);border:1px solid var(--line);border-radius:15px;padding:16px;margin-top:12px}
+    .planItemHead{display:flex;gap:12px;align-items:center;justify-content:space-between}
+    .planItemHead strong{display:block;font-size:17px;letter-spacing:-.03em}
+    .planItemHead small{display:block;font-size:12px;color:var(--muted);margin-top:5px}
+    .planItemBtns{display:flex;gap:7px;flex:none;flex-wrap:wrap;justify-content:flex-end}
+    .planItemBtns button{padding:10px 11px;min-height:40px}
+    .editorExercise{border:1px solid var(--line);border-radius:14px;padding:15px;margin:13px 0;background:var(--surface)}
+    .editorExercise .field{margin-top:12px}.editorExercise .field input,.editorExercise .field select,.routineName{height:46px;width:100%;border:1px solid #4b5a53;border-radius:10px;background:var(--surface2);color:var(--ink);padding:9px 12px;font-size:15px}
+    .editorExercise .fields{margin:0;grid-template-columns:1fr 1fr}.editorExercise .field label{margin-bottom:6px}
+    .editorTools{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.editorTools button{padding:9px 10px;font-size:12px}
+    .setupHint{font-size:13px;color:var(--muted);line-height:1.5;margin:15px 0}
+    @media(max-width:370px){.fields{gap:8px}.field input{font-size:23px}.shell{width:calc(100% - 24px)}.panel,.setPanel{padding:17px}.dayCard{padding:14px}}
+    @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  
+    .authPanel{max-width:490px;margin:28px auto 0}.authPanel .field{margin:16px 0}.authPanel .field input{height:55px;font-size:16px}.authPanel h2{font-size:24px;letter-spacing:-.04em}.authPanel p{color:var(--muted);font-size:14px;line-height:1.55}.infoBox{background:#18251d;border:1px solid #37523b;color:#cce7c9;border-radius:13px;padding:13px 15px;margin:16px 0;font-size:13px;line-height:1.55}.errBox{background:#30201e;border:1px solid #874c47;color:#ffbeb7;border-radius:13px;padding:13px 15px;margin:16px 0;font-size:13px;line-height:1.55}.cloudIndicator{margin:10px 0 0;display:inline-flex;align-items:center;gap:6px;border:1px solid #37523b;color:var(--accent);background:#17251d;font-size:11px;padding:7px 11px;border-radius:999px}.cloudIndicator.pending{border-color:#86703c;background:#322a1d;color:#ffe3a1}.cloudIndicator.failed{border-color:#874c47;background:#30201e;color:#ffbeb7}.busy{opacity:.65;pointer-events:none}.minor{font-size:12px;color:var(--muted);line-height:1.5}.inlineNotice{margin:12px 0;font-size:13px;color:#ffbeb7;line-height:1.5}.setPanel .primary:disabled{opacity:.8}.historyCard summary small{line-height:1.4}
+</style></head><body>
+<main class="shell"><header class="header"><div class="brand"><span class="brandmark">1</span><span>one set.</span></div><button id="menuButton" class="quietBtn" type="button">History & backup</button></header><div id="app" aria-live="polite"></div><footer class="footer">One exercise. One set. <strong>Get stronger.</strong></footer></main><script>
+(function(){
+'use strict';
+const CONFIG_KEY='oneset_cloud_config_v1', AUTH_KEY='oneset_cloud_auth_v1', CACHE_KEY='oneset_cloud_verified_cache_v1';
+const LOGIN_DB='oneset_remember_login_v1', LOGIN_STORE='sessions';
+function safePublicConfig(c){
+ if(!c || typeof c.url!=='string' || typeof c.key!=='string')return null;
+ const url=c.url.trim().replace(/\/$/,'');const key=c.key.trim();
+ let u;try{u=new URL(url);}catch(_){return null;}
+ if(u.protocol!=='https:'||!/^[a-z0-9-]+\.supabase\.co$/.test(u.hostname)||u.port||u.username||u.password||(u.pathname&&u.pathname!=='/')||u.search||u.hash)return null;
+ // Only accept publishable keys, or a verified legacy anonymous key. Never publish service-role JWTs.
+ let safe=key.startsWith('sb_publishable_');
+ if(!safe && key.startsWith('eyJ')){
+  try{const payload=JSON.parse(atob(key.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));safe=payload.role==='anon';}catch(_){safe=false;}
+ }
+ return safe?{url:u.origin,key}:null;
+}
+const fixedConfig=safePublicConfig(window.ONE_SET_PUBLIC_CONFIG);
+// IndexedDB is a secondary copy of the login session ONLY. The database remains
+// the sole source of truth for workouts. No workout sets are kept here.
+function loginDB(op,value){return new Promise(resolve=>{
+ let finished=false,db=null;
+ const done=v=>{if(finished)return;finished=true;try{db?.close();}catch(_){}resolve(v);};
+ if(!('indexedDB' in window)){done(null);return;}
+ let timeout=setTimeout(()=>done(null),2200);
+ const finish=v=>{clearTimeout(timeout);done(v);};
+ try{
+  const req=indexedDB.open(LOGIN_DB,1);
+  req.onupgradeneeded=()=>{const d=req.result;if(!d.objectStoreNames.contains(LOGIN_STORE))d.createObjectStore(LOGIN_STORE);};
+  req.onerror=()=>finish(null);req.onblocked=()=>finish(null);
+  req.onsuccess=()=>{
+   db=req.result;try{
+    const tx=db.transaction(LOGIN_STORE,op==='get'?'readonly':'readwrite');
+    const store=tx.objectStore(LOGIN_STORE);
+    let result=null;
+    const r=op==='get'?store.get('current'):op==='put'?store.put(value,'current'):store.delete('current');
+    r.onsuccess=()=>{if(op==='get')result=r.result||null;};
+    tx.oncomplete=()=>finish(op==='get'?result:true);
+    tx.onerror=()=>finish(null);tx.onabort=()=>finish(null);
+   }catch(_){finish(null);}
+  };
+ }catch(_){finish(null);}
+});}
+
+const OLD_KEY='oneset_tracker_original_plan_v1';
+const STARTER_PLAN={
+ mon:{day:'Monday',name:'Upper A',exercises:[
+  {id:'pullups',name:'Pull-ups / assisted pull-ups',sets:4,reps:'5–10',kind:'body',hint:'Begin each rep from a proper hang.'},
+  {id:'incline',name:'Incline DB press',sets:4,reps:'8–15',kind:'db'},
+  {id:'row',name:'One-arm DB row',sets:3,reps:'8–15 each',kind:'db',hint:'Log reps per arm; use the lower count if different.'},
+  {id:'lateral',name:'DB lateral raise',sets:3,reps:'12–20',kind:'db'}]},
+ tue:{day:'Tuesday',name:'Lower + Abs',exercises:[
+  {id:'split',name:'Bulgarian split squat',sets:4,reps:'8–15 each',kind:'db'},
+  {id:'rdl',name:'DB Romanian deadlift',sets:4,reps:'8–15',kind:'db',hint:'Keep the weights light while learning the hip hinge.'},
+  {id:'calf',name:'Standing DB calf raise',sets:3,reps:'12–20',kind:'db'},
+  {id:'knee',name:'Hanging knee raise',sets:3,reps:'8–15',kind:'body'}]},
+ thu:{day:'Thursday',name:'Upper B',exercises:[
+  {id:'chinups',name:'Chin-ups',sets:4,reps:'5–10',kind:'body'},
+  {id:'flat',name:'Flat DB bench press',sets:4,reps:'8–15',kind:'db'},
+  {id:'shoulder',name:'DB shoulder press',sets:3,reps:'8–15',kind:'db'},
+  {id:'hammer',name:'Hammer curl',sets:3,reps:'8–15',kind:'db'}]},
+ sat:{day:'Saturday',name:'Full Body',exercises:[
+  {id:'split',name:'Bulgarian split squat',sets:3,reps:'10–15 each',kind:'db'},
+  {id:'pullups',name:'Pull-ups',sets:3,reps:'5–10',kind:'body'},
+  {id:'incline',name:'Incline DB press',sets:3,reps:'8–15',kind:'db'},
+  {id:'lateral',name:'DB lateral raise',sets:3,reps:'12–20',kind:'db'}]}
+};
+const MAX_EXTRA=4, STARTER_DAYS=['mon','tue','thu','sat'];
+function starterRoutines(){return STARTER_DAYS.map(id=>({id,name:STARTER_PLAN[id].name,exercises:clone(STARTER_PLAN[id].exercises)}));}
+function routineById(id){return routines.find(r=>r.id===id)||null;}
+function sessionRoutine(s){return s.snapshot?.exercises?.length?s.snapshot:(STARTER_PLAN[s.dayId]?{id:s.dayId,name:STARTER_PLAN[s.dayId].name,exercises:STARTER_PLAN[s.dayId].exercises}:null);}
+function newId(prefix){return prefix+'-'+(crypto.randomUUID?.()||Date.now()+'-'+Math.random().toString(36).slice(2));}
+function validRoutines(list){return Array.isArray(list)&&list.length<=30&&list.every(r=>r&&typeof r.id==='string'&&r.id.length>0&&r.id.length<=140&&typeof r.name==='string'&&r.name.trim().length>0&&r.name.length<=80&&Array.isArray(r.exercises)&&r.exercises.length>=1&&r.exercises.length<=35&&r.exercises.every(ex=>ex&&typeof ex.id==='string'&&ex.id.length>0&&ex.id.length<=140&&typeof ex.name==='string'&&ex.name.trim().length>0&&ex.name.length<=100&&Number.isInteger(ex.sets)&&ex.sets>=1&&ex.sets<=12&&typeof ex.reps==='string'&&ex.reps.length>0&&ex.reps.length<=45&&['db','weight','body'].includes(ex.kind)&&(!ex.hint||typeof ex.hint==='string'&&ex.hint.length<=200)));}
+
+const app=document.getElementById('app'),menu=document.getElementById('menuButton');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const read=(key)=>{try{return JSON.parse(localStorage.getItem(key)||'null');}catch(_){return null;}};
+const store=(key,val)=>{try{localStorage.setItem(key,JSON.stringify(val));return true;}catch(_){return false;}};
+const drop=(key)=>{try{localStorage.removeItem(key);}catch(_){}};
+const clone=x=>JSON.parse(JSON.stringify(x));
+const fmtDate=x=>{try{return new Date(x).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}catch(_){return 'Unknown date';}};
+let config=read(CONFIG_KEY),auth=read(AUTH_KEY),sessions=[],routines=[],planRevision=0,editorDraft=null,activeId=null,view='setup',backView='home',busy=false,notice='',err='',draft=null,finishedSession=null;
+if(fixedConfig){
+ // Preserve an existing sign-in when the embedded settings point to the same project.
+ if(config?.url && config.url!==fixedConfig.url){drop(AUTH_KEY);auth=null;}
+ config=fixedConfig;store(CONFIG_KEY,config);
+}
+async function rememberAuth(){
+ const localOK=store(AUTH_KEY,auth);
+ const backupOK=await loginDB('put',{url:config.url,auth});
+ if(!localOK&&!backupOK)notice='This device did not retain your sign-in. Your workouts are still safe in Supabase, but you may need to log in next time.';
+ return !!(localOK||backupOK);
+}
+async function forgetAuth(){
+ const backupCleared=await loginDB('delete');
+ drop(AUTH_KEY);auth=null;
+ return backupCleared;
+}
+
+let legacy=null;
+function findActive(){return sessions.find(s=>s.id===activeId&&s.status==='active')||null;}
+function currentExercise(s){return sessionRoutine(s)?.exercises[s.index]||null;}
+function logsOf(s,ex){return Array.isArray(s.logs?.[ex])?s.logs[ex]:[];}
+function extraOf(s,ex){return Math.max(0,Math.min(MAX_EXTRA,Number(s.extraSets?.[ex]||0)));}
+function totalOf(s,ex){return ex.sets+extraOf(s,ex.id);}
+function fmtSet(a,ex){const kg=Number(a.kg)||0;if(ex.kind==='body')return `${a.reps} reps · ${a.mode==='added'?'BW +'+kg+' kg':a.mode==='assisted'?(kg?'Assisted '+kg+' kg':'Assisted'):'Bodyweight'}`;return `${a.reps} reps · ${kg} kg${ex.kind==='db'?' / DB':''}`;}
+function prevSession(ex,sId){return [...sessions].filter(x=>x.id!==sId&&logsOf(x,ex).length).sort((a,b)=>new Date(b.startedAt)-new Date(a.startedAt))[0]||null;}
+function cue(set,ex){const m=ex.reps.match(/(\d+)\s*[–-]\s*(\d+)/),top=m?Number(m[2]):null;if(top!==null&&set.reps>=top)return set.mode==='assisted'?'Top of range: gradually reduce assistance when ready.':'Top of range: consider a small weight increase when ready.';return 'Optional goal: '+(set.reps+1)+' clean reps at the same weight. Matching last time is fine.';}
+function setBusy(flag,msg){busy=flag;const indicator=document.getElementById('cloudStatus');if(indicator){indicator.textContent=flag?'● Saving to cloud…':'✓ Cloud connected';indicator.className='cloudIndicator '+(flag?'pending':'');}const btn=document.getElementById('saveSetButton');if(btn){btn.disabled=flag;btn.textContent=flag?'Saving to cloud…':btn.dataset.original||'Save set ✓';}}
+function markError(message){err=message||'Could not save. Check Wi-Fi and retry.';const place=document.getElementById('pageError');if(place){place.textContent='NOT SAVED: '+err;place.style.display='block';}else{render();}}
+function statusBar(){return `<div id="cloudStatus" class="cloudIndicator ${busy?'pending':''}">${busy?'● Saving to cloud…':'✓ Cloud connected'}</div><div id="pageError" class="errBox" style="${err?'':'display:none'}">${err?'NOT SAVED: '+esc(err):''}</div>`;}
+function headers(token){return {'apikey':config.key,'Authorization':'Bearer '+token,'Content-Type':'application/json'};}
+async function raw(url,opts={}){let resp;try{resp=await fetch(url,opts);}catch(_){throw new Error('No connection to the cloud. The set has NOT been saved.');}let data=null;const text=await resp.text();if(text){try{data=JSON.parse(text);}catch(_){data=text;}}if(!resp.ok){const detail=data?.msg||data?.message||data?.error_description||data?.error||('Cloud returned '+resp.status);throw new Error('HTTP '+resp.status+': '+String(detail));}return data;}
+async function refreshAuth(){if(!auth?.refresh_token)throw new Error('Session expired. Please sign in again.');const result=await raw(config.url+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{'apikey':config.key,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:auth.refresh_token})});if(!result.access_token)throw new Error('Could not refresh login.');auth={...auth,...result,expires_at:Date.now()+(result.expires_in||3600)*1000,user:result.user||auth.user};await rememberAuth();return auth.access_token;}
+async function getToken(){if(!auth?.access_token)throw new Error('Please sign in again.');if((auth.expires_at||0)<Date.now()+90000)await refreshAuth();return auth.access_token;}
+async function api(path,options={}){let token=await getToken();let last;for(let attempt=0;attempt<2;attempt++){
+ try{return await raw(config.url+'/rest/v1/'+path,{...options,headers:{...headers(token),'Prefer':'return=representation',...(options.headers||{})}});}catch(e){last=e;if(attempt===0&&/jwt|401|token expired|invalid token/i.test(e.message)){token=await refreshAuth();continue;}break;}}
+ throw last;}
+function fromRow(r){return {id:r.id,dayId:r.day_id,startedAt:r.started_at,finishedAt:r.finished_at,status:r.status,index:r.exercise_index,logs:r.logs||{},extraSets:r.extra_sets||{},snapshot:r.plan_snapshot||null,revision:r.revision||1};}
+function toRow(s){return {id:s.id,user_id:auth.user.id,day_id:s.dayId,started_at:s.startedAt,finished_at:s.finishedAt||null,status:s.status,exercise_index:s.index,logs:s.logs,extra_sets:s.extraSets||{},plan_snapshot:s.snapshot||null,revision:s.revision,updated_at:new Date().toISOString()};}
+function setCache(){store(CACHE_KEY,{userId:auth?.user?.id,sessions,at:new Date().toISOString()});}
+async function loadPlan(){
+ const rows=await api('oneset_plans?select=*&limit=1',{method:'GET'});
+ if(!Array.isArray(rows))throw new Error('Could not load your personal routines.');
+ if(rows.length===0){
+  // Each new account starts with an independent cloud copy of the original four workouts.
+  await api('oneset_plans?on_conflict=user_id',{method:'POST',headers:{'Prefer':'resolution=ignore-duplicates,return=representation'},body:JSON.stringify({user_id:auth.user.id,routines:starterRoutines(),revision:1})});
+  const retry=await api('oneset_plans?select=*&limit=1',{method:'GET'});
+  if(retry.length!==1)throw new Error('Cloud did not confirm creation of your starter workouts.');
+  routines=retry[0].routines;planRevision=retry[0].revision;
+ }else{routines=rows[0].routines;planRevision=rows[0].revision;}
+ if(!validRoutines(routines))throw new Error('Your stored routine data needs attention; no changes were made.');
+}
+async function savePlan(next){
+ if(!validRoutines(next))throw new Error('Every routine needs a name and at least one valid exercise.');
+ const revision=planRevision;
+ const result=await api('oneset_plans?user_id=eq.'+encodeURIComponent(auth.user.id)+'&revision=eq.'+revision,{method:'PATCH',body:JSON.stringify({routines:next,revision:revision+1,updated_at:new Date().toISOString()})});
+ if(!Array.isArray(result)||result.length!==1)throw new Error('Your routines changed on another device. Reload the page before editing again.');
+ routines=clone(result[0].routines);planRevision=result[0].revision;
+}
+async function loadRemote(){const rows=await api('oneset_sessions?select=*&order=started_at.desc&limit=10000',{method:'GET'});if(!Array.isArray(rows))throw new Error('Unexpected response from cloud storage.');sessions=rows.map(fromRow);activeId=[...sessions].filter(s=>s.status==='active').sort((a,b)=>new Date(b.startedAt)-new Date(a.startedAt))[0]?.id||null;setCache();}
+async function createRemote(s){const result=await api('oneset_sessions',{method:'POST',body:JSON.stringify(toRow(s))});if(!Array.isArray(result)||result.length!==1)throw new Error('Cloud did not confirm the new session.');return fromRow(result[0]);}
+async function updateRemote(s){const updated={...s,revision:s.revision+1};const id=encodeURIComponent(s.id),rev=encodeURIComponent(s.revision);const result=await api('oneset_sessions?id=eq.'+id+'&revision=eq.'+rev,{method:'PATCH',body:JSON.stringify(toRow(updated))});if(!Array.isArray(result)||result.length!==1)throw new Error('Your session changed elsewhere. Reload cloud history before making changes.');return fromRow(result[0]);}
+async function deleteRemote(s){const result=await api('oneset_sessions?id=eq.'+encodeURIComponent(s.id)+'&revision=eq.'+encodeURIComponent(s.revision),{method:'DELETE'});if(!Array.isArray(result)||result.length!==1)throw new Error('Delete was not confirmed. Reload history.');}
+async function transact(task){if(busy)return false;setBusy(true);err='';try{await task();setCache();setBusy(false);render();return true;}catch(e){setBusy(false);markError(e.message);return false;}}
+async function editCurrent(update){const s=findActive();if(!s)return false;return transact(async()=>{const next=clone(s);update(next);const stored=await updateRemote(next===s?next:{...next,revision:s.revision});sessions=sessions.map(x=>x.id===s.id?stored:x);activeId=stored.status==='active'?stored.id:null;});}
+function render(){menu.hidden=['setup','auth'].includes(view);menu.textContent=['tools','plans','editPlan'].includes(view)?'Back':'History & backup';
+ if(view==='setup')renderSetup();else if(view==='auth')renderAuth();else if(view==='workout'&&findActive())renderWorkout();else if(view==='tools')renderTools();else if(view==='plans')renderPlans();else if(view==='editPlan')renderEditPlan();else if(view==='complete')renderComplete();else renderHome();}
+function renderSetup(){app.innerHTML=`<section class="fade authPanel"><div class="eyebrow">ONE-TIME SETUP</div><h1 class="big">Cloud first.<br>No lost sets.</h1><p>We'll store your workouts in a private Supabase account. You'll need to create a free Supabase project and run the provided SQL once.</p><div class="infoBox">Use your <b>project URL</b> and <b>publishable key</b>. Never paste a secret or service-role key.</div><form id="setupForm"><div class="field"><label for="url">Supabase project URL</label><input id="url" type="url" inputmode="url" placeholder="https://project-ref.supabase.co" value="${esc(config?.url||'')}" required><small>Just the project URL, with no /auth/v1, /rest/v1, or other path.</small></div><div class="field"><label for="key">Supabase publishable key</label><input id="key" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="sb_publishable_..." value="${esc(config?.key||'')}" required></div><button class="primary" type="submit" id="connectButton">Test connection & continue →</button></form><p class="minor">Copy both from the SAME Supabase project in Project Settings → API Keys / Connect. To skip setup on future devices, set the public configuration near the top of index.html on GitHub.</p><div id="setupError" role="alert" class="inlineNotice"></div></section>`;
+ app.querySelector('#setupForm').onsubmit=async e=>{e.preventDefault();if(busy)return;
+   const entered=document.getElementById('url').value.trim(), key=document.getElementById('key').value.trim();
+   const button=document.getElementById('connectButton'), message=document.getElementById('setupError');
+   try{
+     const parsed=new URL(entered);
+     if(parsed.protocol!=='https:' || !/^[a-z0-9-]+\.supabase\.co$/.test(parsed.hostname) || parsed.port || parsed.username || parsed.password || !['','/'].includes(parsed.pathname) || parsed.search || parsed.hash){
+       throw new Error('Use the project URL only, like https://PROJECT-REF.supabase.co — no /auth/v1, /rest/v1, extra text or dashboard link.');
+     }
+     if(!(key.startsWith('sb_publishable_')||key.startsWith('eyJ')) || key.startsWith('sb_secret_')){
+       throw new Error('Use the publishable key from the same project. Never use a secret or service-role key.');
+     }
+     busy=true;button.disabled=true;button.textContent='Checking Supabase…';message.textContent='';
+     let settings;
+     try{settings=await raw(parsed.origin+'/auth/v1/settings',{method:'GET',headers:{'apikey':key}});}
+     catch(ex){if(/404/.test(ex.message))throw new Error('Supabase returned 404. Recheck the project URL in your dashboard; this address does not appear to reach an Auth service.');throw new Error('Could not verify Supabase connection: '+ex.message);}
+     if(!settings || typeof settings!=='object')throw new Error('Supabase did not return valid authentication settings. Recheck project details.');
+     if(settings.disable_signup)throw new Error('Supabase has account creation disabled. Enable email sign-ups in Authentication settings.');
+     config={url:parsed.origin,key};store(CONFIG_KEY,config);auth=null;drop(AUTH_KEY);view='auth';notice='Cloud connection checked. You can now create an account.';err='';render();
+   }catch(ex){message.textContent=ex.message;}
+   finally{busy=false;if(button.isConnected){button.disabled=false;button.textContent='Test connection & continue →';}}
+ };
+}
+function renderAuth(){app.innerHTML=`<section class="fade authPanel"><div class="eyebrow">PRIVATE WORKOUT HISTORY</div><h1 class="big">Sign in.<br>Pick up where you left off.</h1><p>Your workout history lives online under this login. One Set will try to keep you signed in on this device.</p>${notice?`<div class="infoBox">${esc(notice)}</div>`:''}${err?`<div class="errBox">${esc(err)}</div>`:''}<form id="loginForm"><div class="field"><label for="email">Email</label><input id="email" type="email" autocomplete="email" required placeholder="you@example.com"></div><div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" minlength="8" required placeholder="At least 8 characters"></div><button id="login" class="primary" type="submit">Sign in</button><div class="buttonRow"><button id="signup" class="secondary" type="button">Create account</button>${!fixedConfig?'<button id="editSetup" class="secondary" type="button">Cloud settings</button>':''}</div></form><p class="minor">New account? Tap Create account. Supabase might ask you to verify your email first.</p></section>`;
+ app.querySelector('#loginForm').onsubmit=e=>{e.preventDefault();signIn(false);};app.querySelector('#signup').onclick=()=>signIn(true);app.querySelector('#editSetup')?.addEventListener('click',()=>{view='setup';render();});}
+async function signIn(signup){if(busy)return;const email=app.querySelector('#email').value.trim(),password=app.querySelector('#password').value;if(!email||password.length<8){err='Enter a valid email and a password of at least 8 characters.';renderAuth();return;}busy=true;const btn=app.querySelector('#login');btn.disabled=true;btn.textContent='Connecting…';err='';try{
+  const path=signup?'/auth/v1/signup':'/auth/v1/token?grant_type=password';const body={email,password};const reply=await raw(config.url+path,{method:'POST',headers:{'apikey':config.key,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!reply.access_token){notice='Account request received. Check your email for a confirmation link, then return to One Set and sign in.';view='auth';return;}
+  auth={access_token:reply.access_token,refresh_token:reply.refresh_token,expires_at:Date.now()+(reply.expires_in||3600)*1000,user:reply.user};
+  if(!auth.user?.id)throw new Error('Login response did not include an account ID.');const remembered=await rememberAuth();await loadPlan();await loadRemote();view='home';if(remembered)notice='';err='';
+ }catch(e){err=/404/.test(e.message)?'Supabase returned 404 during account creation. Open Cloud settings and recheck that the project URL and publishable key come from the same project. If they do, check whether the Supabase project is active.':e.message;view='auth';}finally{busy=false;render();}}
+function renderHome(){const active=findActive();
+ app.innerHTML=`<section class="fade"><div class="eyebrow">YOUR PERSONAL ROUTINE</div><h1 class="big">Show up.<br>Do the next set.</h1><p class="sub">One exercise at a time. Every saved set confirmed by the cloud.</p>${statusBar()}${active?`<div class="resumeBox"><div class="eyebrow">IN PROGRESS</div><strong>${esc(sessionRoutine(active)?.name||'Workout')}</strong><p>${Object.values(active.logs).reduce((n,arr)=>n+(Array.isArray(arr)?arr.length:0),0)} sets saved online</p><button type="button" class="primary" id="resume">Resume workout →</button></div>`:''}<div class="dayGrid">${routines.map(r=>`<button type="button" class="dayCard" data-day="${esc(r.id)}"><b>${esc(r.name)}</b><span>${r.exercises.length} exercises</span></button>`).join('')}</div>${!routines.length?'<div class="infoBox">Your routine list is empty. Add your first workout below.</div>':''}<div class="editToolbar"><span class="footnote">Only your account sees your edits.</span><button type="button" id="manageRoutines" class="secondary">Edit routines ⚙</button></div><p class="footnote">Your workout history stays separate from your routines, even when you edit or delete one.</p></section>`;
+ app.querySelectorAll('[data-day]').forEach(b=>b.onclick=()=>startWorkout(b.dataset.day));app.querySelector('#resume')?.addEventListener('click',()=>{view='workout';render();});app.querySelector('#manageRoutines').onclick=()=>{view='plans';render();};}
+async function startWorkout(day){const routine=routineById(day);if(!routine||!routine.exercises.length)return;const old=findActive();if(old?.dayId===day){view='workout';render();return;}
+ const hasLogs=old&&Object.values(old.logs).some(a=>Array.isArray(a)&&a.length);
+ if(old&&hasLogs&&!confirm(`Switch to ${routine.name}? Logged sets for ${sessionRoutine(old)?.name||'your current workout'} will stay in history as a partial session.`))return;
+ const ok=await transact(async()=>{
+  if(old&&!hasLogs){const updated=clone(old);updated.dayId=day;updated.snapshot=clone(routine);updated.index=0;updated.logs={};updated.extraSets={};updated.startedAt=new Date().toISOString();const row=await updateRemote(updated);sessions=sessions.map(x=>x.id===old.id?row:x);activeId=row.id;}
+  else{
+   if(old){const next={...clone(old),status:'partial',finishedAt:new Date().toISOString()};const partial=await updateRemote(next);sessions=sessions.map(x=>x.id===old.id?partial:x);activeId=null;}
+   const item={id:newId('session'),dayId:day,snapshot:clone(routine),startedAt:new Date().toISOString(),finishedAt:null,status:'active',index:0,logs:{},extraSets:{},revision:1};
+   const row=await createRemote(item);sessions.push(row);activeId=row.id;
+  }
+ });if(ok){draft=null;view='workout';render();}}
+function renderPlans(){
+ app.innerHTML=`<section class="fade"><div class="backNav"><button class="smallLink" id="backHome">← Workouts</button></div><div class="eyebrow">ONLY YOUR ACCOUNT</div><h1 class="big">Your routines.</h1><p class="sub">These started from the original four-day plan. Edit anything here; nobody else's routine changes.</p>${statusBar()}${notice?`<div class="infoBox">${esc(notice)}</div>`:''}${routines.map(r=>`<div class="planItem"><div class="planItemHead"><div><strong>${esc(r.name)}</strong><small>${r.exercises.length} exercises</small></div><div class="planItemBtns"><button class="secondary" data-edit="${esc(r.id)}">Edit</button><button class="sessionDelete" data-remove="${esc(r.id)}">Delete</button></div></div></div>`).join('')}${!routines.length?'<p class="setupHint">No routines left. Create your own below.</p>':''}<button id="newRoutine" class="primary" style="margin-top:18px">+ Add routine</button><p class="footnote">Deleting a routine does not delete past workouts. A workout already in progress keeps its original exercises.</p></section>`;
+ app.querySelector('#backHome').onclick=()=>{view='home';render();};
+ app.querySelector('#newRoutine').onclick=()=>{editorDraft={id:newId('routine'),name:'',exercises:[{id:newId('exercise'),name:'',sets:3,reps:'8–12',kind:'db'}]};view='editPlan';render();};
+ app.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{editorDraft=clone(routineById(b.dataset.edit));view='editPlan';render();});
+ app.querySelectorAll('[data-remove]').forEach(b=>b.onclick=async()=>{
+  const r=routineById(b.dataset.remove);if(!r||!confirm(`Delete your routine “${r.name}”? Past workout records stay saved. This will not affect any other account.`))return;
+  const ok=await transact(()=>savePlan(routines.filter(x=>x.id!==r.id)));
+  if(ok){notice='Routine deleted. Workout history kept.';render();}
+ });
+}
+function readEditor(){
+ if(!editorDraft)return;
+ const name=app.querySelector('#routineName');if(name)editorDraft.name=name.value;
+ for(let i=0;i<editorDraft.exercises.length;i++){
+  const ex=editorDraft.exercises[i];const node=app.querySelector(`[data-ex-index="${i}"]`);if(!node)continue;
+  ex.name=node.querySelector('[data-field="name"]').value;
+  ex.sets=Number(node.querySelector('[data-field="sets"]').value);
+  ex.reps=node.querySelector('[data-field="reps"]').value;
+  ex.kind=node.querySelector('[data-field="kind"]').value;
+ }
+}
+function renderEditPlan(){
+ if(!editorDraft){view='plans';render();return;}
+ const fresh=!routineById(editorDraft.id);
+ app.innerHTML=`<section class="fade"><div class="backNav"><button class="smallLink" id="backPlans">← My routines</button></div><div class="eyebrow">${fresh?'NEW ROUTINE':'EDIT ROUTINE'}</div><h1 class="big">Make it yours.</h1><p class="sub">These changes affect future workouts only. Your old sets stay intact.</p>${statusBar()}<div class="field" style="margin:22px 0"><label for="routineName">Routine name</label><input id="routineName" class="routineName" maxlength="80" placeholder="e.g. Push Day" value="${esc(editorDraft.name)}"></div><div class="tinyline"><strong>Exercises</strong><span>${editorDraft.exercises.length} total</span></div>${editorDraft.exercises.map((ex,i)=>`<div class="editorExercise" data-ex-index="${i}"><div class="tinyline"><strong>Exercise ${i+1}</strong><span>One at a time during training</span></div><div class="field"><label>Exercise name</label><input data-field="name" maxlength="100" placeholder="e.g. Bench press" value="${esc(ex.name)}"></div><div class="fields"><div class="field"><label>Sets</label><input data-field="sets" type="number" min="1" max="12" step="1" value="${esc(ex.sets)}"></div><div class="field"><label>Target reps</label><input data-field="reps" maxlength="45" placeholder="8–12" value="${esc(ex.reps)}"></div></div><div class="field"><label>Weight logging</label><select data-field="kind"><option value="db" ${ex.kind==='db'?'selected':''}>Dumbbells (kg per DB)</option><option value="weight" ${ex.kind==='weight'?'selected':''}>Weight (total kg)</option><option value="body" ${ex.kind==='body'?'selected':''}>Bodyweight / assisted</option></select></div><div class="editorTools"><button class="secondary" data-move="up" data-i="${i}" ${i===0?'disabled':''}>↑ Move up</button><button class="secondary" data-move="down" data-i="${i}" ${i===editorDraft.exercises.length-1?'disabled':''}>↓ Move down</button><button class="sessionDelete" data-remove-ex="${i}" ${editorDraft.exercises.length===1?'disabled':''}>Remove exercise</button></div></div>`).join('')}<button class="secondary" id="addExercise" style="width:100%;margin-top:10px">+ Add exercise</button><button class="primary" id="saveRoutine" style="margin-top:20px">Save routine to cloud ✓</button><p class="footnote">No changes are saved until you tap Save routine. An existing in-progress workout isn't changed.</p></section>`;
+ app.querySelector('#backPlans').onclick=()=>{if(!confirm('Leave without saving these edits?'))return;editorDraft=null;view='plans';render();};
+ app.querySelector('#addExercise').onclick=()=>{readEditor();if(editorDraft.exercises.length>=35){markError('Maximum 35 exercises in a routine.');return;}editorDraft.exercises.push({id:newId('exercise'),name:'',sets:3,reps:'8–12',kind:'db'});render();};
+ app.querySelectorAll('[data-remove-ex]').forEach(b=>b.onclick=()=>{readEditor();editorDraft.exercises.splice(Number(b.dataset.removeEx),1);render();});
+ app.querySelectorAll('[data-move]').forEach(b=>b.onclick=()=>{readEditor();const i=Number(b.dataset.i),j=i+(b.dataset.move==='up'?-1:1);[editorDraft.exercises[i],editorDraft.exercises[j]]=[editorDraft.exercises[j],editorDraft.exercises[i]];render();});
+ app.querySelector('#saveRoutine').onclick=async()=>{
+  readEditor();editorDraft.name=editorDraft.name.trim();editorDraft.exercises.forEach(ex=>{ex.name=ex.name.trim();ex.reps=ex.reps.trim();});
+  const next=clone(routines),i=next.findIndex(r=>r.id===editorDraft.id);
+  if(i>=0)next[i]=clone(editorDraft);else next.push(clone(editorDraft));
+  if(!validRoutines(next)){markError('Add a routine name, valid exercise names, 1–12 sets, a rep target and a weight type.');return;}
+  const ok=await transact(()=>savePlan(next));
+  if(ok){editorDraft=null;notice='Your routine changes were saved to Supabase.';view='plans';render();}
+ };
+}
+
+function renderWorkout(){const s=findActive();if(!s){view='home';render();return;}const day=sessionRoutine(s),ex=currentExercise(s);if(!ex){view='home';render();return;}
+ const sets=logsOf(s,ex.id),index=sets.length,planned=ex.sets,total=totalOf(s,ex),complete=index>=total,previous=prevSession(ex.id,s.id),prev=previous?logsOf(previous,ex.id):[],lastSet=prev[index],starting=sets.at(-1)||lastSet||prev[0]||null;
+ const mode=draft?.mode||starting?.mode||(ex.kind==='body'?'bw':'db'),reps=draft?.reps??'',kg=draft?.kg??starting?.kg??'';
+ app.innerHTML=`<section class="fade"><div class="backNav"><button type="button" id="allWorkouts" class="smallLink">← All workouts</button></div><div class="tinyline"><span>${esc(day.name)}</span><span>Exercise <strong>${s.index+1}</strong> of ${day.exercises.length}</span></div><div class="progress">${day.exercises.map((_,i)=>`<div class="${i<=s.index?'on':''}"></div>`).join('')}</div><div class="eyebrow">ONLY FOCUS ON THIS</div><h1 class="exerciseName">${esc(ex.name)}</h1><p class="range">${planned} planned sets · ${esc(ex.reps)} reps${ex.hint?'<br>'+esc(ex.hint):''}</p>${statusBar()}
+ ${!complete?`<div class="prev"><div class="prevTop"><b>${previous?'Last time · Set '+(index+1):'Starting point'}</b><span>${previous?fmtDate(previous.startedAt):'No history yet'}</span></div><div class="${lastSet?'prevData':'prevEmpty'}">${lastSet?esc(fmtSet(lastSet,ex)):previous?'No set '+(index+1)+' last time':'Your first session for this exercise'}</div>${lastSet?`<p class="progressCue">${esc(cue(lastSet,ex))}</p>`:''}</div>`:''}
+ ${!complete?`<div class="setPanel"><div class="setTop"><strong>Set ${index+1} / ${total} ${index>=planned?'<small style="color:var(--accent)">Optional</small>':''}</strong><div class="dotRow">${Array.from({length:total},(_,i)=>`<span class="dot ${i<index?'done':i===index?'now':''}"></span>`).join('')}</div></div><form id="setForm">${ex.kind==='body'?`<div class="modeRow">${[['bw','Bodyweight'],['added','+ Weight'],['assisted','Assisted']].map(([val,label])=>`<button type="button" data-mode="${val}" class="pill ${mode===val?'selected':''}">${label}</button>`).join('')}</div>`:''}<div class="fields ${ex.kind==='body'&&mode==='bw'?'onlyInput':''}"><div class="field"><label for="reps">Reps done</label><input id="reps" type="number" inputmode="numeric" min="1" max="300" step="1" placeholder="0" value="${esc(reps)}" required><small>Clean reps only</small></div>${ex.kind!=='body'||mode!=='bw'?`<div class="field"><label for="kg">${ex.kind==='db'?'Kg per dumbbell':ex.kind==='weight'?'Weight (kg)':mode==='added'?'Extra kg added':'Kg assistance (optional)'}</label><input id="kg" type="number" inputmode="decimal" min="0" max="300" step="any" value="${esc(kg)}" placeholder="0" ${mode==='assisted'?'':'required'}><small>${ex.kind==='db'?'If using two DBs, log weight of one':ex.kind==='weight'?'Total weight used':'Enter 0 for band assistance'}</small></div>`:''}</div><button type="submit" id="saveSetButton" class="primary" data-original="Save set ${index+1} ✓">Save set ${index+1} ✓</button><p class="minor" style="text-align:center">Moves to the next set only after cloud confirmation</p></form>${index>=planned?'<button id="cancelExtra" class="smallLink" type="button">Never mind · finish exercise</button>':''}</div>`:`<div class="completeCard"><div class="completeIcon">✓</div><h2>Exercise done.</h2><p>Your sets are saved online. You can move on.</p><button id="nextExercise" class="primary" type="button">${s.index===day.exercises.length-1?'Finish workout':'Next exercise →'}</button>${extraOf(s,ex.id)<MAX_EXTRA?'<div class="extraActions"><button type="button" id="addSet" class="secondary">+ Add an optional set</button></div>':''}</div>`}
+ ${sets.length?`<div class="saved"><h3>Cloud saved sets</h3>${sets.map((set,i)=>`<div class="savedRow"><span><span class="num">${i+1}.</span>${esc(fmtSet(set,ex))}</span><span class="tick">✓</span></div>`).join('')}<div style="text-align:right"><button type="button" class="smallLink" id="undo">Undo last set</button></div></div>`:''}${!complete&&index<planned?'<div style="text-align:center"><button type="button" class="smallLink" id="skip">Skip exercise</button></div>':''}</section>`;
+ app.querySelector('#allWorkouts').onclick=()=>{view='home';draft=null;err='';render();};app.querySelector('#setForm')?.addEventListener('submit',saveSet);
+ app.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{draft={mode:b.dataset.mode,reps:app.querySelector('#reps')?.value||'',kg:app.querySelector('#kg')?.value||'0'};render();});
+ app.querySelector('#undo')?.addEventListener('click',()=>editCurrent(x=>{const removed=logsOf(x,ex.id).pop();draft=removed?{reps:removed.reps,kg:removed.kg,mode:removed.mode}:null;}));
+ app.querySelector('#addSet')?.addEventListener('click',()=>editCurrent(x=>{x.extraSets[ex.id]=extraOf(x,ex.id)+1;}));
+ app.querySelector('#cancelExtra')?.addEventListener('click',()=>editCurrent(x=>{x.extraSets[ex.id]=logsOf(x,ex.id).length-ex.sets;}));
+ app.querySelector('#nextExercise')?.addEventListener('click',advance);
+ app.querySelector('#skip')?.addEventListener('click',()=>{if(confirm('Skip this exercise?'))advance();});
+}
+async function saveSet(event){event.preventDefault();const s=findActive(),ex=s&&currentExercise(s);if(!ex||busy)return;const repInput=app.querySelector('#reps'),kgInput=app.querySelector('#kg'),reps=Number(repInput.value),rawKG=kgInput?.value??'0',kg=rawKG===''&&ex.kind==='body'?0:Number(rawKG),mode=ex.kind==='body'?(app.querySelector('[data-mode].selected')?.dataset.mode||'bw'):ex.kind;
+ if(!Number.isInteger(reps)||reps<1||reps>300){markError('Enter a valid number of reps.');return;}if(kgInput&&(rawKG===''&&mode!=='assisted'||!Number.isFinite(kg)||kg<0||kg>300)){markError('Enter a valid weight in kg.');return;}
+ const record={reps,kg,mode,at:new Date().toISOString()};const ok=await editCurrent(x=>{if(!x.logs[ex.id])x.logs[ex.id]=[];if(x.logs[ex.id].length>=totalOf(x,ex))throw new Error('Planned sets already completed.');x.logs[ex.id].push(record);});if(ok){draft=null;app.querySelector('#reps')?.focus();}}
+async function advance(){const s=findActive();if(!s)return;const last=s.index>=sessionRoutine(s).exercises.length-1;const ok=await editCurrent(x=>{if(last){x.status='finished';x.finishedAt=new Date().toISOString();}else x.index++;});if(ok){draft=null;err='';if(last){finishedSession=s.id;view='complete';}else view='workout';render();window.scrollTo(0,0);}}
+function renderComplete(){app.innerHTML=`<section class="fade"><div class="eyebrow">WORKOUT SAVED TO CLOUD</div><div class="completeCard"><div class="completeIcon">✓</div><h2>All done.</h2><p>Workout completion and sets are confirmed saved online under your account.</p><button id="backHome" type="button" class="primary">Back to workouts</button><div class="extraActions"><button id="backup" type="button" class="secondary">Download separate backup</button></div></div></section>`;app.querySelector('#backHome').onclick=()=>{view='home';render();};app.querySelector('#backup').onclick=exportJson;}
+function renderTools(){const sorted=[...sessions].sort((a,b)=>new Date(b.startedAt)-new Date(a.startedAt));const legacyCount=legacy?.sessions?.length||0;
+ app.innerHTML=`<section class="fade"><div class="eyebrow">YOUR PRIVATE DATA</div><h1 class="big">History & backup.</h1><p class="sub">Fetched from your Supabase cloud account.</p>${statusBar()}${notice?`<div class="infoBox">${esc(notice)}</div>`:''}
+ <section class="toolsSection"><h2 class="toolsTitle">Sessions (${sorted.length})</h2>${sorted.length?sorted.map(s=>{const day=sessionRoutine(s);if(!day)return '';const entries=day.exercises.map(ex=>({ex,sets:logsOf(s,ex.id)})).filter(x=>x.sets.length);return `<details class="historyCard"><summary><span><b>${esc(day.name)}</b><small>${fmtDate(s.startedAt)} · ${s.status==='finished'?'Finished':s.status==='active'?'In progress':'Partial'} · ${entries.reduce((n,x)=>n+x.sets.length,0)} sets</small></span><span class="arrow">›</span></summary><div class="historyInner">${entries.map(x=>`<div class="historyEx"><strong>${esc(x.ex.name)}</strong><div>${x.sets.map((set,i)=>`Set ${i+1}: ${esc(fmtSet(set,x.ex))}`).join('<br>')}</div></div>`).join('')||'<p class="minor">No sets logged</p>'}<button type="button" class="sessionDelete" data-delete="${esc(s.id)}">${s.status==='active'?'Discard this workout':'Delete this session'}</button></div></details>`;}).join(''):'<p class="footnote">No cloud history yet. Log a set and it will appear here.</p>'}</section>
+ <div class="divider"></div><section class="toolsSection"><h2 class="toolsTitle">Independent backups</h2><div class="dataControls"><button id="export" type="button" class="secondary">Download JSON backup</button><button id="csv" type="button" class="secondary">Export CSV</button><button id="restore" type="button" class="secondary">Restore JSON backup</button>${legacyCount?`<button id="importOld" type="button" class="secondary">Import old on-device data (${legacyCount})</button>`:''}<button id="reload" type="button" class="secondary">Reload from cloud</button></div><input hidden type="file" accept=".json,application/json" id="restoreFile"><p class="footnote">Only your account can access these database records. Cloud is primary; backups stored in Files/iCloud Drive add an independent copy. Never upload a secret key to GitHub.</p></section><div class="divider"></div><section class="toolsSection"><h2 class="toolsTitle">Account</h2><p class="minor">${esc(auth?.user?.email||'Signed in')} · ${esc(config?.url||'')}</p><div class="dataControls"><button type="button" class="secondary" id="signout">Sign out</button>${!fixedConfig?'<button type="button" class="secondary" id="changeCloud">Change cloud project</button>':''}</div></section>${findActive()?'<button type="button" class="primary" id="return" style="margin-top:22px">Return to current exercise →</button>':''}</section>`;
+ app.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>removeSession(b.dataset.delete));app.querySelector('#export').onclick=exportJson;app.querySelector('#csv').onclick=exportCsv;
+ app.querySelector('#restore').onclick=()=>app.querySelector('#restoreFile').click();app.querySelector('#restoreFile').onchange=restoreFile;app.querySelector('#importOld')?.addEventListener('click',()=>importData(legacy));
+ app.querySelector('#reload').onclick=()=>transact(loadRemote);app.querySelector('#signout').onclick=async()=>{if(!confirm('Sign out? Your cloud workouts stay saved and will return when you sign in again.'))return;const cleared=await forgetAuth();sessions=[];activeId=null;view='auth';notice=cleared===null?"Could not confirm the local login backup was removed. Consider clearing this site's data if you share this device.":'';err='';render();};
+ app.querySelector('#changeCloud')?.addEventListener('click',async()=>{if(!confirm('Change cloud project? Your current records remain in the existing project.'))return;await forgetAuth();view='setup';render();});app.querySelector('#return')?.addEventListener('click',()=>{view='workout';render();});}
+async function removeSession(id){const session=sessions.find(s=>s.id===id);if(!session)return;if(!confirm('Delete this '+(sessionRoutine(session)?.name||'workout')+' session and its sets from the cloud? This is permanent unless you have a backup.'))return;
+ await transact(async()=>{await deleteRemote(session);sessions=sessions.filter(s=>s.id!==id);if(activeId===id)activeId=null;});}
+function download(name,text,type){const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),12000);}
+function backupObject(){return {version:2,routines:clone(routines),sessions:sessions.map(s=>({id:s.id,dayId:s.dayId,snapshot:s.snapshot,startedAt:s.startedAt,finishedAt:s.finishedAt,status:s.status,index:s.index,logs:s.logs,extraSets:s.extraSets})),activeId:activeId};}
+function exportJson(){download('one-set-cloud-backup-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(backupObject(),null,2),'application/json');}
+function exportCsv(){const out=[['Date','Workout','Exercise','Set','Reps','Kg','Weight type','Status']];for(const s of sessions)for(const ex of (sessionRoutine(s)?.exercises||[]))logsOf(s,ex.id).forEach((t,i)=>out.push([s.startedAt.slice(0,10),sessionRoutine(s).name,ex.name,i+1,t.reps,t.kg,t.mode,s.status]));download('one-set-workouts-'+new Date().toISOString().slice(0,10)+'.csv',out.map(row=>row.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n'),'text/csv');}
+function validImport(o){
+ if(!o||![1,2].includes(o.version)||!Array.isArray(o.sessions)||o.sessions.length>10000)return false;
+ if(o.version===2&&(!Array.isArray(o.routines)||!validRoutines(o.routines)))return false;
+ return o.sessions.every(s=>{
+  if(!s||typeof s.id!=='string'||s.id.length>200||typeof s.dayId!=='string'||s.dayId.length>140||typeof s.startedAt!=='string'||!['active','finished','partial'].includes(s.status)||!Number.isInteger(s.index)||s.index<0||!s.logs||typeof s.logs!=='object'||Array.isArray(s.logs))return false;
+  const routine=s.snapshot||STARTER_PLAN[s.dayId];if(!routine||!Array.isArray(routine.exercises)||routine.exercises.length<1||routine.exercises.length>35||s.index>=routine.exercises.length)return false;
+  if(s.snapshot&&!validRoutines([s.snapshot]))return false;
+  return Object.entries(s.logs).every(([id,arr])=>routine.exercises.some(ex=>ex.id===id)&&Array.isArray(arr)&&arr.length<=25&&arr.every(t=>Number.isInteger(t.reps)&&t.reps>=1&&t.reps<=300&&Number.isFinite(t.kg)&&t.kg>=0&&t.kg<=300&&['bw','added','assisted','db','weight'].includes(t.mode)));
+ });
+}
+async function restoreFile(e){const f=e.target.files?.[0];e.target.value='';if(!f)return;let data;try{data=JSON.parse(await f.text());}catch(_){markError('Backup is not a valid JSON file.');return;}await importData(data);}
+async function importData(data){
+ if(!validImport(data)){markError('Invalid One Set backup; no records were changed.');return;}
+ const known=new Set(sessions.map(s=>s.id));const additions=data.sessions.filter(s=>!known.has(s.id));
+ const plansAvailable=data.version===2&&data.routines.length>0;
+ const restorePlans=plansAvailable&&confirm('Do you also want to REPLACE your current workout routines with those in this backup? Your cloud session history will not be deleted. Tap Cancel to keep your current routines.');
+ if(!additions.length&&!restorePlans){notice='No new sessions to import. Your current routines were left alone.';render();return;}
+ if(additions.length&&!confirm(`Import ${additions.length} missing session(s) into this account? Existing workout history will be preserved.`))return;
+ const ok=await transact(async()=>{
+  if(restorePlans)await savePlan(clone(data.routines));
+  let imported=0;
+  for(const s of additions){const clean={id:s.id,dayId:s.dayId,snapshot:s.snapshot||null,startedAt:s.startedAt,finishedAt:s.finishedAt||null,status:s.status==='active'?'partial':s.status,index:s.index,logs:s.logs,extraSets:s.extraSets||{},revision:1};const saved=await createRemote(clean);sessions.push(saved);imported++;}
+  await loadRemote();notice=imported+' session(s) imported.'+(restorePlans?' Routines also restored.':' Your routines are unchanged.');
+ });if(ok){legacy=null;view='tools';render();}
+}
+
+async function legacyFromDevice(){const local=read(OLD_KEY);if(local?.sessions?.length)return local;
+ try{return await new Promise(resolve=>{if(!('indexedDB' in window)){resolve(null);return;}let once=false;const finish=v=>{if(!once){once=true;resolve(v);}};const request=indexedDB.open('oneset_on_device_backup_v1');request.onsuccess=()=>{try{if(!request.result.objectStoreNames.contains('snapshots')){finish(null);return;}const tx=request.result.transaction('snapshots','readonly');const get=tx.objectStore('snapshots').get('latest');get.onsuccess=()=>finish(get.result);get.onerror=()=>finish(null);}catch(_){finish(null);}};request.onerror=()=>finish(null);setTimeout(()=>finish(null),1500);});}catch(_){return null;}}
+async function start(){legacy=await legacyFromDevice();if(config && !auth){const remembered=await loginDB('get');if(remembered?.url===config.url && remembered.auth?.access_token && remembered.auth?.user?.id){auth=remembered.auth;store(AUTH_KEY,auth);}}if(!config?.url||!config?.key){view='setup';render();return;}if(!auth?.access_token||!auth.user?.id){view='auth';render();return;}
+ app.innerHTML='<p class="sub">Connecting to your cloud history…</p>';try{await loadPlan();await loadRemote();view='home';render();}catch(e){err=e.message;app.innerHTML=`<section class="authPanel"><div class="eyebrow">COULD NOT LOAD HISTORY</div><h1 class="big">Not yet connected.</h1><div class="errBox">${esc(err)}</div><p>We will not show an empty workout history when the cloud could not be reached.</p><button type="button" id="retry" class="primary">Retry connection</button><button type="button" id="logout" class="smallLink">Sign in again</button></section>`;app.querySelector('#retry').onclick=start;app.querySelector('#logout').onclick=async()=>{await forgetAuth();view='auth';render();};}}
+menu.onclick=()=>{if(view==='editPlan'){view='plans';editorDraft=null;}else if(view==='plans'){view='home';}else if(view==='tools'){view=backView==='workout'&&findActive()?'workout':'home';err='';}else{backView=view==='workout'?'workout':'home';view='tools';}render();window.scrollTo(0,0);};
+window.addEventListener('online',()=>{if(view==='home'||view==='tools')err='';});
+start();
+})();
+
+</script></body></html>
